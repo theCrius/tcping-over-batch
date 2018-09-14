@@ -1,11 +1,18 @@
 @echo off
 
-set "d=%date:~0,2%%date:~3,2%%date:~6,4%"
-set "hours=%time:~0,2%"
-if "%hours:~0,1%" == " " set hours=0%hours:~1,1%
-set "t=%hours%%time:~3,2%%time:~6,2%"
+SET "d=%date:~0,2%%date:~3,2%%date:~6,4%"
+	SET "hours=%time:~0,2%"
+	IF "%hours:~0,1%" == " " (
+		SET hours=0%hours:~1,1% 
+	)
+	SET "t=%hours%%time:~3,2%%time:~6,2%"
+	SET "filename=%d%_%t%_%host%.log"
 
-set /p host=host Address: 
-set "filename=%d%_%t%_%host%.log"
+SET /p host=host Address: 
+SET /p toLog=Create a log (y/n): 
 
-tcping.exe -j -t -d --tee %filename% %host%
+IF "%toLog%" == "y" (
+	tcping.exe -j -t -d --tee %filename% %host% 
+) ELSE (
+	tcping.exe -j -t -d %host%
+)
